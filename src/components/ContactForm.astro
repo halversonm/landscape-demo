@@ -1,0 +1,35 @@
+---
+/** Demo enquiry form — the client script cancels submit and shows a notice. */
+---
+
+<form class="lead" id="lead-form" novalidate>
+  <div class="field">
+    <label for="f-name">Name</label>
+    <input id="f-name" name="name" type="text" autocomplete="name" required />
+  </div>
+  <div class="field">
+    <label for="f-addr">Property address</label>
+    <input id="f-addr" name="address" type="text" autocomplete="street-address" placeholder="Street, city" />
+  </div>
+  <div class="field">
+    <label for="f-type">Project type</label>
+    <select id="f-type" name="type">
+      <option>Full design &amp; build</option>
+      <option>Hardscape / masonry only</option>
+      <option>Grading &amp; drainage</option>
+      <option>Planting refresh</option>
+      <option>Maintenance program</option>
+      <option>Not sure yet</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="f-msg">What&rsquo;s going on out there?</label>
+    <textarea id="f-msg" name="message" placeholder="Slope, drainage, a patio that never got built…"></textarea>
+  </div>
+  <button class="btn btn-solid" type="submit">Request a site walk</button>
+  <p class="form-note">Demo form — nothing is sent or stored. Wire in your form handler of choice.</p>
+  <p class="form-ok" id="form-ok" role="status">
+    Thanks — this is a demo, so nothing was actually submitted. On a live site this is where the
+    confirmation would go.
+  </p>
+</form>

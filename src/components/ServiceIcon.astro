@@ -1,0 +1,50 @@
+---
+import type { Service } from "../data/services";
+
+interface Props {
+  icon: Service["icon"];
+}
+const { icon } = Astro.props;
+---
+
+<span class="sym" aria-hidden="true">
+  {icon === "design" && (
+    <svg viewBox="0 0 52 52" fill="none">
+      <rect x="8" y="8" width="36" height="36" stroke="currentColor" />
+      <path d="M8 20h36M20 8v36" stroke="currentColor" stroke-width="0.8" />
+      <circle cx="32" cy="32" r="5" stroke="currentColor" />
+    </svg>
+  )}
+  {icon === "masonry" && (
+    <svg viewBox="0 0 52 52" fill="none">
+      <path d="M10 34h32v8H10zM14 26h24v8H14zM18 18h16v8H18z" stroke="currentColor" />
+    </svg>
+  )}
+  {icon === "planting" && (
+    <svg viewBox="0 0 52 52" fill="none">
+      <circle cx="26" cy="26" r="10" stroke="currentColor" />
+      <path d="M26 10v32M10 26h32M15 15l22 22M37 15 15 37" stroke="currentColor" stroke-width="0.8" />
+    </svg>
+  )}
+  {icon === "drainage" && (
+    <svg viewBox="0 0 52 52" fill="none">
+      <path d="M8 30c10 0 10-8 18-8s8 8 18 8" stroke="currentColor" />
+      <path d="M8 38c10 0 10-8 18-8s8 8 18 8" stroke="currentColor" opacity="0.5" />
+      <path d="M26 14v10" stroke="currentColor" />
+    </svg>
+  )}
+  {icon === "lighting" && (
+    <svg viewBox="0 0 52 52" fill="none">
+      <circle cx="26" cy="20" r="7" stroke="currentColor" />
+      <path d="M26 27v12M20 44h12" stroke="currentColor" />
+      <path d="M26 20v-9M26 20 33 15M26 20 19 15" stroke="currentColor" stroke-width="0.8" />
+    </svg>
+  )}
+  {icon === "maintenance" && (
+    <svg viewBox="0 0 52 52" fill="none">
+      <path d="M12 12h28v28H12z" stroke="currentColor" />
+      <path d="M12 26h28M26 12v28" stroke="currentColor" stroke-width="0.8" />
+      <path d="m16 16 8 8M36 16l-8 8M16 36l8-8M36 36l-8-8" stroke="currentColor" stroke-width="0.8" />
+    </svg>
+  )}
+</span>

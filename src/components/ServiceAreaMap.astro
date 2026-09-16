@@ -1,0 +1,195 @@
+---
+import { areaPins, serviceRadius } from "../data/serviceArea";
+
+const apiKey = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY;
+---
+
+<div class="area-map reveal">
+  {apiKey ? (
+    <div
+      id="area-google-map"
+      class="google-map"
+      role="img"
+      aria-label={`Map of the Twin Cities metro showing Cedar & Stone's roughly ${serviceRadius.miles}-mile service area and the towns served.`}
+    >
+      <div class="map-loading">Loading map…</div>
+    </div>
+  ) : (
+    <svg
+      viewBox="0 0 480 340"
+      role="img"
+      aria-label="Stylized plan-view map of the Twin Cities metro with the service radius and project markers."
+    >
+      <rect width="480" height="340" fill="url(#grid)" />
+
+      <!-- rivers -->
+      <path d="M150 20c-10 60 20 90 10 150s-40 90-20 150" fill="none" stroke="var(--plan)" stroke-width="2.5" opacity="0.7" />
+      <path d="M120 150c50 10 120 10 200 40" fill="none" stroke="var(--plan)" stroke-width="2" opacity="0.5" />
+
+      <!-- working radius -->
+      <circle cx="230" cy="180" r="120" fill="var(--accent)" fill-opacity="0.08" stroke="var(--accent)" stroke-dasharray="5 5" />
+
+      <g font-family="Hanken Grotesk, sans-serif" font-size="11" fill="var(--ink-soft)">
+        {areaPins.map((pin) => (
+          <Fragment>
+            <circle cx={pin.x} cy={pin.y} r="4" fill="var(--accent)" />
+            <text
+              x={pin.anchor === "end" ? pin.x - 10 : pin.x + 10}
+              y={pin.y - 3}
+              text-anchor={pin.anchor === "end" ? "end" : "start"}
+            >
+              {pin.label}
+            </text>
+          </Fragment>
+        ))}
+      </g>
+
+      <g transform="translate(440 40)">
+        <circle r="14" fill="none" stroke="var(--plan)" />
+        <path d="M0-12 4 5 0 1-4 5Z" fill="var(--plan)" />
+        <text y="-16" text-anchor="middle" font-family="Zilla Slab, serif" font-weight="700" font-size="10" fill="var(--plan)">N</text>
+      </g>
+
+      <text x="16" y="326" font-family="Hanken Grotesk, sans-serif" font-size="10" fill="var(--ink-soft)">
+        Approx. {serviceRadius.miles}-mile working radius · not to scale
+      </text>
+    </svg>
+  )}
+</div>
+
+{
+  apiKey && (
+    <script
+      define:vars={{
+        apiKey,
+        pins: areaPins,
+        center: serviceRadius.center,
+        miles: serviceRadius.miles,
+      }}
+    >
+      (function () {
+        const el = document.getElementById("area-google-map");
+        if (!el) return;
+
+        const METERS_PER_MILE = 1609.34;
+
+        // Map styling pulled from the site's own light/dark tokens so the
+        // real map stays in the same visual family as the drawn version.
+        const lightStyle = [
+          { elementType: "geometry", stylers: [{ color: "#E7E2D2" }] },
+          { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+          { elementType: "labels.text.fill", stylers: [{ color: "#55584B" }] },
+          { elementType: "labels.text.stroke", stylers: [{ color: "#E7E2D2" }] },
+          { featureType: "administrative", elementType: "geometry", stylers: [{ visibility: "off" }] },
+          { featureType: "poi", stylers: [{ visibility: "off" }] },
+          { featureType: "road", elementType: "geometry", stylers: [{ color: "#F1EDE0" }] },
+          { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#C7C0AB" }] },
+          { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#DED8C4" }] },
+          { featureType: "transit", stylers: [{ visibility: "off" }] },
+          { featureType: "water", elementType: "geometry", stylers: [{ color: "#B9CDD1" }] },
+        ];
+        const darkStyle = [
+          { elementType: "geometry", stylers: [{ color: "#182319" }] },
+          { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+          { elementType: "labels.text.fill", stylers: [{ color: "#A9B09C" }] },
+          { elementType: "labels.text.stroke", stylers: [{ color: "#182319" }] },
+          { featureType: "administrative", elementType: "geometry", stylers: [{ visibility: "off" }] },
+          { featureType: "poi", stylers: [{ visibility: "off" }] },
+          { featureType: "road", elementType: "geometry", stylers: [{ color: "#1F2C20" }] },
+          { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#38492F" }] },
+          { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#263528" }] },
+          { featureType: "transit", stylers: [{ visibility: "off" }] },
+          { featureType: "water", elementType: "geometry", stylers: [{ color: "#28414A" }] },
+        ];
+
+        function isDark() {
+          const attr = document.documentElement.getAttribute("data-theme");
+          if (attr === "dark") return true;
+          if (attr === "light") return false;
+          return window.matchMedia("(prefers-color-scheme: dark)").matches;
+        }
+
+        function colorsFor(dark) {
+          return dark
+            ? { accent: "#94B463", plan: "#7FAAB6", surface: "#1F2C20" }
+            : { accent: "#5C7A38", plan: "#3D6472", surface: "#F1EDE0" };
+        }
+
+        function markerIcon(c) {
+          return {
+            path: "M0-8a8 8 0 1 1 0 16 8 8 0 0 1 0-16Z",
+            fillColor: c.accent,
+            fillOpacity: 1,
+            strokeColor: c.surface,
+            strokeWeight: 2,
+            scale: 1,
+          };
+        }
+
+        let map, circle, markers;
+
+        function applyTheme() {
+          const dark = isDark();
+          const c = colorsFor(dark);
+          map.setOptions({ styles: dark ? darkStyle : lightStyle });
+          circle.setOptions({ strokeColor: c.plan, fillColor: c.accent });
+          markers.forEach((m) => m.setIcon(markerIcon(c)));
+        }
+
+        window.__initAreaMap = function () {
+          const dark = isDark();
+          const c = colorsFor(dark);
+
+          map = new google.maps.Map(el, {
+            center,
+            zoom: 9,
+            disableDefaultUI: true,
+            zoomControl: true,
+            gestureHandling: "cooperative",
+            styles: dark ? darkStyle : lightStyle,
+          });
+
+          circle = new google.maps.Circle({
+            strokeColor: c.plan,
+            strokeOpacity: 0.6,
+            strokeWeight: 1.5,
+            fillColor: c.accent,
+            fillOpacity: 0.1,
+            map,
+            center,
+            radius: miles * METERS_PER_MILE,
+          });
+
+          markers = pins.map(
+            (pin) =>
+              new google.maps.Marker({
+                position: { lat: pin.lat, lng: pin.lng },
+                map,
+                title: pin.label,
+                icon: markerIcon(c),
+              }),
+          );
+
+          new MutationObserver(applyTheme).observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["data-theme"],
+          });
+          window
+            .matchMedia("(prefers-color-scheme: dark)")
+            .addEventListener("change", applyTheme);
+        };
+
+        const script = document.createElement("script");
+        script.src =
+          "https://maps.googleapis.com/maps/api/js?key=" +
+          encodeURIComponent(apiKey) +
+          "&callback=__initAreaMap&loading=async";
+        script.async = true;
+        script.onerror = function () {
+          el.innerHTML = '<div class="map-loading">Map failed to load.</div>';
+        };
+        document.head.appendChild(script);
+      })();
+    </script>
+  )
+}

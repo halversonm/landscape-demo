@@ -1,0 +1,35 @@
+---
+import { nav, site } from "../data/site";
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="name">{site.name}</div>
+        <p>
+          Landscape design and build for the Twin Cities. We draw it, we build it, we come back and
+          check on it.
+        </p>
+      </div>
+      <div class="foot-col">
+        <h4>Site</h4>
+        <ul>
+          {nav.slice(0, 4).map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Get in touch</h4>
+        <ul>
+          <li><a href="#contact">Request a site walk</a></li>
+          <li><a href={site.phoneHref}>{site.phone}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-rule">
+      <span>© {new Date().getFullYear()} {site.name} — fictional company, demo site only.</span>
+      <span>Drawn in the language of a landscape architect&rsquo;s plan set.</span>
+    </div>
+  </div>
+</footer>

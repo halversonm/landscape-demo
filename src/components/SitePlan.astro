@@ -1,0 +1,61 @@
+---
+/**
+ * The hero drawing: an illustrative landscape site plan.
+ * Contour lines animate in and the tree layer is populated by the
+ * client script in Layout.astro (falls back gracefully without JS).
+ */
+---
+
+<figure class="plan-figure">
+  <svg
+    id="siteplan"
+    viewBox="0 0 640 520"
+    role="img"
+    aria-label="Illustrative landscape site plan showing contour lines, a house footprint, curved walkway, planting beds and proposed trees."
+  >
+    <rect x="0" y="0" width="640" height="520" fill="url(#grid)" />
+
+    <!-- property line -->
+    <rect x="26" y="26" width="588" height="468" fill="none" stroke="var(--plan)" stroke-width="1.4" stroke-dasharray="10 4 2 4" />
+
+    <!-- contours -->
+    <path class="contour" d="M40 150C140 120 210 210 320 190S520 120 604 150" fill="none" stroke="var(--plan)" stroke-width="1" opacity="0.55" />
+    <path class="contour" d="M40 220C150 190 230 275 340 258S520 200 604 226" fill="none" stroke="var(--plan)" stroke-width="1" opacity="0.7" />
+    <path class="contour" d="M40 300C160 280 250 350 360 335S515 300 604 320" fill="none" stroke="var(--plan)" stroke-width="1.2" opacity="0.85" />
+    <path class="contour" d="M40 388C170 372 260 430 380 418S520 400 604 414" fill="none" stroke="var(--plan)" stroke-width="1" opacity="0.6" />
+
+    <!-- house footprint -->
+    <path d="M230 300h150v-70h80v-70H360v40h-70v40h-60Z" fill="url(#hatch)" stroke="var(--ink)" stroke-width="1.6" />
+    <text x="300" y="262" font-family="Zilla Slab, serif" font-size="13" fill="var(--ink)" letter-spacing="1">RESIDENCE</text>
+
+    <!-- driveway -->
+    <path d="M462 160h120M462 230h120" stroke="var(--ink-soft)" stroke-width="1" stroke-dasharray="4 3" />
+
+    <!-- walkway -->
+    <path d="M110 470C170 400 150 340 250 330 320 323 340 300 380 300" fill="none" stroke="var(--accent)" stroke-width="11" stroke-opacity="0.28" stroke-linecap="round" />
+    <path d="M110 470C170 400 150 340 250 330 320 323 340 300 380 300" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 4" />
+
+    <!-- planting beds -->
+    <path d="M70 90C130 70 210 78 235 110s-6 70-70 80S40 240 46 170 30 105 70 90Z" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-width="1.1" stroke-dasharray="3 3" />
+    <path d="M430 330c60-14 118 4 128 40s-30 70-92 66-96-16-96-52 20-40 60-54Z" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-width="1.1" stroke-dasharray="3 3" />
+
+    <!-- patio -->
+    <rect x="392" y="300" width="96" height="70" fill="var(--surface-2)" stroke="var(--ink)" stroke-width="1.2" />
+    <path d="M392 316h96M392 332h96M392 348h96M408 300v70M424 300v70M440 300v70M456 300v70M472 300v70" stroke="var(--line)" stroke-width="0.7" />
+
+    <g id="tree-layer"></g>
+
+    <!-- dimension line -->
+    <path d="M26 508h588" stroke="var(--ink)" stroke-width="0.8" />
+    <path d="M26 502v12M614 502v12M320 502v12" stroke="var(--ink)" stroke-width="0.8" />
+    <text x="150" y="500" font-family="Hanken Grotesk, sans-serif" font-size="10" fill="var(--ink-soft)">92'-0"</text>
+    <text x="440" y="500" font-family="Hanken Grotesk, sans-serif" font-size="10" fill="var(--ink-soft)">92'-0"</text>
+
+    <!-- north arrow -->
+    <g transform="translate(586 66)">
+      <circle r="17" fill="none" stroke="var(--plan)" stroke-width="1" />
+      <path d="M0 -15L5 6 0 1 -5 6Z" fill="var(--plan)" />
+      <text x="0" y="-20" text-anchor="middle" font-family="Zilla Slab, serif" font-size="11" font-weight="700" fill="var(--plan)">N</text>
+    </g>
+  </svg>
+</figure>

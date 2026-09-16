@@ -1,23 +1,176 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import SvgDefs from "../components/SvgDefs.astro";
+import { site } from "../data/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = site.description } = Astro.props;
+const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.tagline}`;
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script is:inline>
+      // Set theme + js flag before first paint to avoid a flash.
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        try {
+          var saved = localStorage.getItem("cs-theme");
+          if (saved === "light" || saved === "dark") root.setAttribute("data-theme", saved);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <div class="demo-flag">
+      Demo site — Cedar &amp; Stone Landscape Co. is a fictional company built to show a design approach.
+    </div>
+
+    <SvgDefs />
+    <Header />
+
+    <main id="main">
+      <span id="top"></span>
+      <slot />
+    </main>
+
+    <Footer />
+
+    <script>
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const root = document.documentElement;
+
+      // Theme toggle
+      const toggle = document.getElementById("theme-toggle");
+      toggle?.addEventListener("click", () => {
+        const cur = root.getAttribute("data-theme");
+        const isDark =
+          cur === "dark" ||
+          (!cur && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        const next = isDark ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try {
+          localStorage.setItem("cs-theme", next);
+        } catch (e) {}
+      });
+
+      // Plan-view trees in the hero drawing
+      const layer = document.getElementById("tree-layer");
+      if (layer) {
+        const NS = "http://www.w3.org/2000/svg";
+        const trees: [number, number, number][] = [
+          [110, 130, 13], [150, 165, 10], [95, 200, 11],
+          [470, 380, 14], [520, 350, 10], [500, 410, 12],
+          [560, 250, 9], [90, 430, 12], [140, 450, 9], [300, 470, 8],
+        ];
+        trees.forEach(([x, y, r], i) => {
+          const g = document.createElementNS(NS, "g");
+          g.setAttribute("transform", `translate(${x} ${y})`);
+          g.setAttribute("opacity", "0");
+          const c = document.createElementNS(NS, "circle");
+          c.setAttribute("r", String(r));
+          c.setAttribute("fill", "none");
+          c.setAttribute("stroke", "var(--accent)");
+          c.setAttribute("stroke-width", "1.1");
+          g.appendChild(c);
+          for (let a = 0; a < 8; a++) {
+            const ang = (a / 8) * Math.PI * 2;
+            const l = document.createElementNS(NS, "line");
+            l.setAttribute("x1", String(Math.cos(ang) * r * 0.35));
+            l.setAttribute("y1", String(Math.sin(ang) * r * 0.35));
+            l.setAttribute("x2", String(Math.cos(ang) * r));
+            l.setAttribute("y2", String(Math.sin(ang) * r));
+            l.setAttribute("stroke", "var(--accent)");
+            l.setAttribute("stroke-width", "0.7");
+            g.appendChild(l);
+          }
+          const dot = document.createElementNS(NS, "circle");
+          dot.setAttribute("r", "1.4");
+          dot.setAttribute("fill", "var(--accent)");
+          g.appendChild(dot);
+          layer.appendChild(g);
+          if (reduce) {
+            g.setAttribute("opacity", "1");
+          } else {
+            g.style.transition = "opacity .5s ease";
+            window.setTimeout(() => g.setAttribute("opacity", "1"), 700 + i * 90);
+          }
+        });
+      }
+
+      // Contour lines draw themselves in
+      document.querySelectorAll<SVGPathElement>(".contour").forEach((p, i) => {
+        const len = p.getTotalLength();
+        p.style.setProperty("--len", String(len));
+        if (reduce) {
+          p.style.strokeDashoffset = "0";
+          return;
+        }
+        p.style.transition = `stroke-dashoffset 1.4s ease ${i * 0.18}s`;
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => {
+            p.style.strokeDashoffset = "0";
+          }),
+        );
+      });
+
+      // Scroll reveal
+      const revealEls = document.querySelectorAll(".reveal");
+      if (reduce || !("IntersectionObserver" in window)) {
+        revealEls.forEach((el) => el.classList.add("in"));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add("in");
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+        );
+        revealEls.forEach((el) => io.observe(el));
+      }
+
+      // Demo form
+      const form = document.getElementById("lead-form") as HTMLFormElement | null;
+      form?.addEventListener("submit", (ev) => {
+        ev.preventDefault();
+        document.getElementById("form-ok")?.classList.add("show");
+        const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+        if (btn) btn.textContent = "Sent (demo)";
+      });
+    </script>
+  </body>
+</html>

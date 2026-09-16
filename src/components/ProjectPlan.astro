@@ -1,0 +1,66 @@
+---
+import type { Project } from "../data/projects";
+
+interface Props {
+  slug: Project["slug"];
+  label: string;
+}
+const { slug, label } = Astro.props;
+---
+
+<div class="thumb">
+  {slug === "kenwood" && (
+    <svg viewBox="0 0 400 240" role="img" aria-label={`Plan diagram: ${label}`}>
+      <rect width="400" height="240" fill="var(--surface-2)" fill-opacity="0.35" />
+      <rect x="20" y="20" width="360" height="200" fill="none" stroke="var(--plan)" stroke-dasharray="8 4" />
+      <rect x="150" y="86" width="100" height="68" fill="var(--surface-2)" stroke="var(--ink)" />
+      <path d="M150 103h100M150 120h100M150 137h100M167 86v68M184 86v68M201 86v68M218 86v68M235 86v68" stroke="var(--line)" stroke-width="0.7" />
+      <path d="M40 40h70v40H40zM290 40h70v40h-70zM40 160h70v40H40zM290 160h70v40h-70z" fill="var(--accent)" fill-opacity="0.16" stroke="var(--accent)" stroke-dasharray="3 3" />
+      <g stroke="var(--accent)" fill="none">
+        <circle cx="75" cy="60" r="9" /><circle cx="325" cy="60" r="9" />
+        <circle cx="75" cy="180" r="9" /><circle cx="325" cy="180" r="9" />
+      </g>
+      <path d="M200 20v66M200 154v66" stroke="var(--accent)" stroke-width="8" stroke-opacity="0.25" />
+    </svg>
+  )}
+
+  {slug === "marine" && (
+    <svg viewBox="0 0 400 240" role="img" aria-label={`Plan diagram: ${label}`}>
+      <rect width="400" height="240" fill="var(--surface-2)" fill-opacity="0.35" />
+      <path d="M0 60h400M0 100h400M0 140h400M0 180h400" stroke="var(--plan)" stroke-opacity="0.6" />
+      <path d="M60 40h280v34H60zM90 74h220v34H90zM120 108h160v34H120zM150 142h100v34H150z" fill="var(--surface-2)" stroke="var(--ink)" />
+      <path d="M0 210q100-20 200 0t200 0" fill="none" stroke="var(--accent)" stroke-width="2" />
+      <g stroke="var(--accent)" fill="none">
+        <circle cx="40" cy="205" r="8" /><circle cx="150" cy="212" r="8" />
+        <circle cx="260" cy="208" r="8" /><circle cx="360" cy="205" r="8" />
+      </g>
+      <g transform="translate(360 34)"><path d="M0-12 4 6 0 2-4 6Z" fill="var(--plan)" /></g>
+    </svg>
+  )}
+
+  {slug === "linden-hills" && (
+    <svg viewBox="0 0 400 240" role="img" aria-label={`Plan diagram: ${label}`}>
+      <rect width="400" height="240" fill="var(--surface-2)" fill-opacity="0.35" />
+      <rect x="140" y="10" width="120" height="60" fill="url(#hatch)" stroke="var(--ink)" />
+      <path d="M160 70v20M240 70v20" stroke="var(--plan)" stroke-dasharray="4 3" />
+      <path d="M90 150c30-50 190-50 220 0s-30 70-110 70-140-20-110-70Z" fill="var(--accent)" fill-opacity="0.18" stroke="var(--accent)" stroke-dasharray="3 3" />
+      <path d="M110 150c10-14 170-14 180 0M120 170c20-12 140-12 160 0M140 190c20-8 80-8 120 0" stroke="var(--accent)" stroke-opacity="0.7" fill="none" />
+      <path d="M0 232h400" stroke="var(--ink-soft)" stroke-width="3" />
+      <text x="12" y="226" font-family="Hanken Grotesk, sans-serif" font-size="9" fill="var(--ink-soft)">RIGHT OF WAY</text>
+    </svg>
+  )}
+
+  {slug === "summit" && (
+    <svg viewBox="0 0 400 240" role="img" aria-label={`Plan diagram: ${label}`}>
+      <rect width="400" height="240" fill="var(--surface-2)" fill-opacity="0.35" />
+      <rect x="120" y="8" width="160" height="52" fill="url(#hatch)" stroke="var(--ink)" />
+      <path d="M180 60v40h40V60M170 100h60v14h-60zM160 114h80v14h-80zM150 128h100v90H150z" fill="var(--surface-2)" stroke="var(--ink)" />
+      <path d="M150 150h100M150 172h100M150 194h100M175 128v90M200 128v90M225 128v90" stroke="var(--line)" stroke-width="0.7" />
+      <g stroke="var(--accent)" fill="none">
+        <circle cx="70" cy="150" r="12" /><circle cx="330" cy="150" r="12" />
+      </g>
+      <path d="M70 138v24M58 150h24M330 138v24M318 150h24" stroke="var(--accent)" stroke-width="0.8" />
+      <path d="M0 224h400" stroke="var(--ink-soft)" stroke-width="3" />
+    </svg>
+  )}
+</div>

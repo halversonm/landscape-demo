@@ -1,0 +1,19 @@
+---
+/**
+ * Shared SVG pattern defs, rendered once near the top of <body>.
+ * Referenced by id (url(#grid) / url(#hatch)) from every plan drawing on
+ * the page. Colours are fixed neutral alphas so they read on either theme
+ * without depending on where the pattern is used.
+ */
+---
+
+<svg aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute">
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="rgba(125,125,110,0.22)" stroke-width="0.6" />
+    </pattern>
+    <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <path d="M0 0v7" stroke="rgba(110,110,96,0.55)" stroke-width="0.7" />
+    </pattern>
+  </defs>
+</svg>
