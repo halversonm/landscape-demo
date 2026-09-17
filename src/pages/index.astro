@@ -11,6 +11,8 @@ import { phases } from "../data/process";
 import { projects } from "../data/projects";
 import { testimonials } from "../data/testimonials";
 import { serviceAreas } from "../data/serviceArea";
+
+const heroProject = projects.find((p) => p.slug === "kenwood")!;
 ---
 
 <Layout>
@@ -23,7 +25,7 @@ import { serviceAreas } from "../data/serviceArea";
         </p>
         <h1>{site.tagline}</h1>
         <p class="lede">
-          We draw the whole property first — grades, drainage, planting, stone — then our own crews
+          We draw the whole property first — grades, drainage, planting, stone — then 
           build it. One plan set, one team, from the first site walk to the last plant watered in.
         </p>
         <div class="hero-cta">
@@ -51,7 +53,7 @@ import { serviceAreas } from "../data/serviceArea";
       </div>
 
       <div class="reveal">
-        <SitePlan />
+        <SitePlan photo={heroProject.photo} photoAlt={heroProject.photoAlt} />
         <p class="label" style="margin-top:0.9rem;color:var(--ink-soft)">
           Kenwood, Minneapolis — courtyard garden
         </p>

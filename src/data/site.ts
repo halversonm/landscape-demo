@@ -9,10 +9,10 @@ export const site = {
   tagline: "Ground worth standing on.",
   description:
     "Landscape design and build for the Twin Cities. We draw the whole property first — grades, drainage, planting, stone — then our own crews build it.",
-  phone: "(612) 555-0148",
-  phoneHref: "tel:+16125550148",
+  phone: "(555) 555-0148",
+  phoneHref: "tel:+15555550148",
   email: "studio@cedarandstone.example",
-  address: ["1847 Vandalia Street", "St. Paul, MN 55114"],
+  address: ["5555 Sample Street", "Minneapolis, MN 55114"],
   hours: ["Mon–Fri, 7:30a–4:30p", "Site walks scheduled evenings & Saturdays"],
   license: [
     "MN Residential Building Contractor #BC000000",

@@ -1,18 +1,25 @@
 ---
 /**
- * The hero drawing: an illustrative landscape site plan.
- * Contour lines animate in and the tree layer is populated by the
- * client script in Layout.astro (falls back gracefully without JS).
+ * The hero drawing: an illustrative landscape site plan, paired with a real
+ * "as built" photo underneath (stacked, not side-by-side, so the plan's
+ * small dimension/label text stays legible at hero size).
  */
+interface Props {
+  photo: string;
+  photoAlt: string;
+}
+const { photo, photoAlt } = Astro.props;
 ---
 
 <figure class="plan-figure">
-  <svg
-    id="siteplan"
-    viewBox="0 0 640 520"
-    role="img"
-    aria-label="Illustrative landscape site plan showing contour lines, a house footprint, curved walkway, planting beds and proposed trees."
-  >
+  <div class="plan-pane">
+    <p class="compare-tag">Plan</p>
+    <svg
+      id="siteplan"
+      viewBox="0 0 640 520"
+      role="img"
+      aria-label="Illustrative landscape site plan showing contour lines, a house footprint, curved walkway, planting beds and proposed trees."
+    >
     <rect x="0" y="0" width="640" height="520" fill="url(#grid)" />
 
     <!-- property line -->
@@ -58,4 +65,10 @@
       <text x="0" y="-20" text-anchor="middle" font-family="Zilla Slab, serif" font-size="11" font-weight="700" fill="var(--plan)">N</text>
     </g>
   </svg>
+  </div>
+
+  <div class="plan-pane plan-pane-photo">
+    <p class="compare-tag">Built</p>
+    <img class="plan-photo" src={photo} alt={photoAlt} loading="lazy" />
+  </div>
 </figure>

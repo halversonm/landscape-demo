@@ -9,7 +9,16 @@ const { project } = Astro.props;
 ---
 
 <article class="project reveal">
-  <ProjectPlan slug={project.slug} label={project.title} />
+  <div class="compare">
+    <div class="compare-pane">
+      <p class="compare-tag">Plan</p>
+      <ProjectPlan slug={project.slug} label={project.title} />
+    </div>
+    <div class="compare-pane">
+      <p class="compare-tag">Built</p>
+      <img class="compare-photo" src={project.photo} alt={project.photoAlt} loading="lazy" />
+    </div>
+  </div>
   <div class="body">
     <p class="label loc">{project.location}</p>
     <h3>{project.title}</h3>

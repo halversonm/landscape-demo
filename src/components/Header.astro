@@ -39,6 +39,48 @@ import { nav, site } from "../data/site";
         </svg>
       </button>
       <a href="#contact" class="btn btn-solid head-cta">Request a site walk</a>
+      <button
+        class="icon-btn menu-toggle"
+        id="menu-toggle"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        type="button"
+      >
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+      </button>
     </div>
   </div>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <nav aria-label="Mobile">
+      {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+    <a href="#contact" class="btn btn-solid">Request a site walk</a>
+  </div>
 </header>
+
+<script>
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+
+  toggle?.addEventListener("click", () => {
+    const open = menu?.hasAttribute("hidden");
+    if (open) {
+      menu?.removeAttribute("hidden");
+      toggle.setAttribute("aria-expanded", "true");
+    } else {
+      menu?.setAttribute("hidden", "");
+      toggle.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  menu?.addEventListener("click", (e) => {
+    if ((e.target as HTMLElement).tagName === "A") {
+      menu.setAttribute("hidden", "");
+      toggle?.setAttribute("aria-expanded", "false");
+    }
+  });
+</script>
